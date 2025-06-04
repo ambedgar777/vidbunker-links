@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Opening Video...</title>
+  <script>
+    function openApp() {
+      const params = new URLSearchParams(window.location.search);
+      const videoId = params.get('id');
+      if (!videoId) {
+        document.body.innerHTML = '<p>Invalid link.</p>';
+        return;
+      }
+
+      // Android intent URL to open your Telegram Player app
+      const intentUrl = `intent://watch?id=${videoId}#Intent;scheme=vidbunker;package=com.uralshare.video.player;end`;
+
+      // Attempt to open app
+      window.location.href = intentUrl;
+
+      // After 2 seconds, fallback to Play Store if app not installed
+      setTimeout(() => {
+        window.location.href = 'https://play.google.com/store/apps/details?id=com.uralshare.video.player';
+      }, 2000);
+    }
+  </script>
+</head>
+<body onload="openApp()">
+  <p>Redirecting to the app...</p>
+</body>
+</html>
