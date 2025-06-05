@@ -2,30 +2,34 @@
 <html>
 <head>
   <title>Opening Video...</title>
+  <meta charset="UTF-8" />
   <script>
     function openApp() {
       const params = new URLSearchParams(window.location.search);
       const videoId = params.get('id');
+
       if (!videoId) {
-        document.body.innerHTML = '<p>Invalid link.</p>';
+        document.body.innerHTML = '<p style="font-family:sans-serif;color:red;">Invalid or missing video ID.</p>';
         return;
       }
 
-      // Android intent URL to open your Telegram Player app
       const intentUrl = `intent://watch?id=${videoId}#Intent;scheme=vidbunker;package=com.uralshare.video.player;end`;
+      const fallbackUrl = 'https://play.google.com/store/apps/details?id=com.uralshare.video.player';
 
-      // Attempt to open app
-      window.location.href = intentUrl;
+      // Open the app using the intent URL
+      const a = document.createElement('a');
+      a.href = intentUrl;
+      document.body.appendChild(a);
+      a.click();
 
-      // After 2 seconds, fallback to Play Store if app not installed
-      //commit
+      // Fallback after delay if app not installed
       setTimeout(() => {
-        window.location.href = 'https://play.google.com/store/apps/details?id=com.uralshare.video.player';
+        window.location.href = fallbackUrl;
       }, 2000);
     }
   </script>
 </head>
-<body onload="openApp()">
-  <p>Redirecting to the app...</p>
+<body onload="openApp()" style="font-family: sans-serif;">
+  <p>Redirecting to the Telegram Player app...</p>
 </body>
 </html>
