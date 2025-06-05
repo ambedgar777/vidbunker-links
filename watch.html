@@ -5,11 +5,10 @@
   <meta charset="UTF-8" />
   <script>
     function openApp() {
-      // Get the last part of the path as videoId
-      const pathParts = window.location.pathname.split('/');
-      const videoId = pathParts[pathParts.length - 1] || null;
+      const params = new URLSearchParams(window.location.search);
+      const videoId = params.get('id');
 
-      if (!videoId || videoId === "index.html") {
+      if (!videoId) {
         document.body.innerHTML = '<p style="font-family:sans-serif;color:red;">Invalid or missing video ID.</p>';
         return;
       }
