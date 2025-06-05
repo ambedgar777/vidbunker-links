@@ -5,10 +5,11 @@
   <meta charset="UTF-8" />
   <script>
     function openApp() {
-      const params = new URLSearchParams(window.location.search);
-      const videoId = params.get('id');
+      // Get the last part of the path as videoId
+      const pathParts = window.location.pathname.split('/');
+      const videoId = pathParts[pathParts.length - 1] || null;
 
-      if (!videoId) {
+      if (!videoId || videoId === "index.html") {
         document.body.innerHTML = '<p style="font-family:sans-serif;color:red;">Invalid or missing video ID.</p>';
         return;
       }
@@ -16,13 +17,11 @@
       const intentUrl = `intent://watch?id=${videoId}#Intent;scheme=vidbunker;package=com.uralshare.video.player;end`;
       const fallbackUrl = 'https://play.google.com/store/apps/details?id=com.uralshare.video.player';
 
-      // Open the app using the intent URL
       const a = document.createElement('a');
       a.href = intentUrl;
       document.body.appendChild(a);
       a.click();
 
-      // Fallback after delay if app not installed
       setTimeout(() => {
         window.location.href = fallbackUrl;
       }, 2000);
