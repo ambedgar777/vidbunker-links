@@ -3,6 +3,10 @@
 <head>
   <title>Opening Video...</title>
   <meta charset="UTF-8" />
+  <!-- Add this for Telegram's in-app browser detection -->
+  <meta property="al:android:url" content="vidbunker://watch?id={VIDEO_ID}">
+  <meta property="al:android:package" content="com.uralshare.video.player">
+  <meta property="al:android:app_name" content="Vidbunker">
   <script>
     function openApp() {
       const params = new URLSearchParams(window.location.search);
@@ -13,13 +17,17 @@
         return;
       }
 
+      // For Telegram's in-app browser
+      if (window.TelegramWebViewProxy !== undefined) {
+        window.location.href = `vidbunker://watch?id=${videoId}`;
+        return;
+      }
+
+      // For regular browsers
       const intentUrl = `intent://watch?id=${videoId}#Intent;scheme=vidbunker;package=com.uralshare.video.player;end`;
       const fallbackUrl = 'https://play.google.com/store/apps/details?id=com.uralshare.video.player';
 
-      const a = document.createElement('a');
-      a.href = intentUrl;
-      document.body.appendChild(a);
-      a.click();
+      window.location.href = intentUrl;
 
       setTimeout(() => {
         window.location.href = fallbackUrl;
@@ -28,6 +36,6 @@
   </script>
 </head>
 <body onload="openApp()" style="font-family: sans-serif;">
-  <p>Redirecting to the Telegram Player app...</p>
+  <p>Redirecting to Vidbunker app...</p>
 </body>
 </html>
